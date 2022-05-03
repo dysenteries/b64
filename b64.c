@@ -110,3 +110,8 @@ char *b64_encode(char *str)
     }
     return b64_encoded;
 }
+
+char *b64_encode(char *str)
+{
+    return NULL;
+}
