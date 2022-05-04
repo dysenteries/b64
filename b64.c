@@ -111,7 +111,22 @@ char *b64_encode(char *str)
     return b64_encoded;
 }
 
-char *b64_encode(char *str)
+char *b64_decode(char *str)
 {
-    return NULL;
+    return str;
+}
+
+char *b64url_encode(char *str)
+{
+    char *b64 = b64_encode(str);
+
+    if (!b64)
+        NULL;
+    for (int i = 0; b64[i]; ++i) {
+        if (b64[i] == '+')
+            b64[i] = '-';
+        if (b64[i] == '/')
+            b64[i] = '_';
+    }
+    return b64;
 }
