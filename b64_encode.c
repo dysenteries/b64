@@ -53,10 +53,10 @@ char *b64_encode(char *str)
     twenty_four_bits[24] = 0;
 
     if (!less_than_three) {
-        b64_encoded = malloc((three_bytes_grouping * 4 + 1) * sizeof(char));
+        b64_encoded = malloc(1 + (three_bytes_grouping * 4) * sizeof(char));
         b64_encoded[three_bytes_grouping * 4] = 0;
     } else {
-        b64_encoded = malloc(((three_bytes_grouping + 1) * 4 + 1) * sizeof(char));
+        b64_encoded = malloc(1 + ((three_bytes_grouping + 1) * 4) * sizeof(char));
         b64_encoded[(three_bytes_grouping + 1) * 4] = 0;
     }
     if (!b64_encoded)
@@ -124,4 +124,11 @@ char *b64url_encode(char *str)
             b64[i] = '_';
     }
     return b64;
+}
+
+int main(int argc, char **argv)
+{
+    if (argc > 1)
+        printf("%s\n", b64_encode(argv[1]));
+    return 0;
 }
