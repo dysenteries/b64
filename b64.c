@@ -56,6 +56,7 @@ char *b64_encode(char *string_to_encode)
         if (!(bits = extract_bits(&string_to_encode[i * 3], 3)))
             return NULL;
         for (int r = 0; r < 4; ++r) { encoded_string[i * 4 + r] = base[bin_to_dec(&bits[r * 6])]; }
+        free(bits);
     }
     if (mod) {
         if (!(bits = extract_bits(&string_to_encode[div * 3], mod)))
@@ -69,6 +70,7 @@ char *b64_encode(char *string_to_encode)
             for (int i = 0; i < 3; ++i) encoded_string[div * 4 + i] = base[bin_to_dec(&bits[i * 6])];
             encoded_string[((div + 1) * 4) - 1] = '=';
         }
+        free(bits);
     }
     return encoded_string;
 }
