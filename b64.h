@@ -1,5 +1,4 @@
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 #ifndef B64_H_

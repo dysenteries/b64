@@ -1,5 +1,4 @@
-#include <string.h>
-#include <stdlib.h>
+#include "b64.h"
 
 static const char base[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
