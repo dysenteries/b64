@@ -141,7 +141,7 @@ char *b64_decode(char *string_to_decode)
             return NULL;
         if (mod == 2) decoded_string[div * 3] = bin_to_dec(bits, 1);
         if (mod == 3) for (int i = 0; i < 2; ++i) decoded_string[div * 3 + i] = bin_to_dec(&bits[i * 8], 2);
+        free(bits);
     }
-    free(bits);
     return decoded_string;
 }
