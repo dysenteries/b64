@@ -42,39 +42,6 @@ static int bin_to_dec(char *binary_string, int mode)
     return dec;
 }
 
-char *b64_encode(char *string_to_encode)
-{
-    if (!string_to_encode) return NULL;
-    int div = strlen(string_to_encode) / 3;
-    int mod = strlen(string_to_encode) % 3;
-    char *encoded_string = malloc_encoded_string(div, mod);
-    char *bits;
-
-    if (!encoded_string)
-        return NULL;
-    for (int i = 0; i < div; ++i) {
-        if (!(bits = extract_bits(&string_to_encode[i * 3], 3)))
-            return NULL;
-        for (int r = 0; r < 4; ++r) { encoded_string[i * 4 + r] = base[bin_to_dec(&bits[r * 6], 0)]; }
-        free(bits);
-    }
-    if (mod) {
-        if (!(bits = extract_bits(&string_to_encode[div * 3], mod)))
-            return NULL;
-        if (mod == 1) {
-            for (int i = 0; i < 4; ++i) bits[i + 8] = '0';
-            for (int i = 0; i < 2; ++i) { encoded_string[div * 4 + i] = base[bin_to_dec(&bits[i * 6], 0)]; encoded_string[(div * 4) + 2 + i] = '='; }
-        }
-        if (mod == 2) {
-            for (int i = 0; i < 2; ++i) bits[i + 16] = '0';
-            for (int i = 0; i < 3; ++i) encoded_string[div * 4 + i] = base[bin_to_dec(&bits[i * 6], 0)];
-            encoded_string[((div + 1) * 4) - 1] = '=';
-        }
-        free(bits);
-    }
-    return encoded_string;
-}
-
 static char *malloc_decoded_string(int div, int mod)
 {
     char *decoded_string;
@@ -122,6 +89,40 @@ static char *get_bits(char *bytes, int bytes_nb)
     return bits;
 }
 
+char *b64_encode(char *string_to_encode)
+{
+    if (!string_to_encode) return NULL;
+    int div = strlen(string_to_encode) / 3;
+    int mod = strlen(string_to_encode) % 3;
+    char *encoded_string = malloc_encoded_string(div, mod);
+    char *bits;
+
+    if (!encoded_string)
+        return NULL;
+    for (int i = 0; i < div; ++i) {
+        if (!(bits = extract_bits(&string_to_encode[i * 3], 3)))
+            return NULL;
+        for (int r = 0; r < 4; ++r) { encoded_string[i * 4 + r] = base[bin_to_dec(&bits[r * 6], 0)]; }
+        free(bits);
+    }
+    if (mod) {
+        if (!(bits = extract_bits(&string_to_encode[div * 3], mod)))
+            return NULL;
+        if (mod == 1) {
+            for (int i = 0; i < 4; ++i) bits[i + 8] = '0';
+            for (int i = 0; i < 2; ++i) { encoded_string[div * 4 + i] = base[bin_to_dec(&bits[i * 6], 0)]; encoded_string[(div * 4) + 2 + i] = '='; }
+        }
+        if (mod == 2) {
+            for (int i = 0; i < 2; ++i) bits[i + 16] = '0';
+            for (int i = 0; i < 3; ++i) encoded_string[div * 4 + i] = base[bin_to_dec(&bits[i * 6], 0)];
+            encoded_string[((div + 1) * 4) - 1] = '=';
+        }
+        free(bits);
+    }
+    return encoded_string;
+}
+
+
 char *b64_decode(char *string_to_decode)
 {
     if (!string_to_decode) return NULL;
@@ -143,5 +144,34 @@ char *b64_decode(char *string_to_decode)
         if (mod == 3) for (int i = 0; i < 2; ++i) decoded_string[div * 3 + i] = bin_to_dec(&bits[i * 8], 2);
         free(bits);
     }
+    return decoded_string;
+}
+
+char *b64url_encode(char *string_to_encode)
+{
+    if (!string_to_encode)
+        return NULL;
+
+    char *encoded_string = b64_encode(string_to_encode);
+
+    for (int i = 0; encoded_string[i]; ++i) {
+        if (encoded_string[i] == '+') encoded_string[i] = '-';
+        if (encoded_string[i] == '/') encoded_string[i] = '_';
+    }
+    return encoded_string;
+}
+
+char *b64url_decode(char *string_to_decode)
+{
+    if (!string_to_decode)
+        return NULL;
+
+    char *decoded_string;
+
+    for (int i = 0; string_to_decode[i]; ++i) {
+        if (string_to_decode[i] == '+') string_to_decode[i] = '-';
+        if (string_to_decode[i] == '/') string_to_decode[i] = '_';
+    }
+    char *decoded_string = b64_decode(string_to_decode);
     return decoded_string;
 }
