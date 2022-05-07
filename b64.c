@@ -122,7 +122,6 @@ char *b64_encode(char *string_to_encode)
     return encoded_string;
 }
 
-
 char *b64_decode(char *string_to_decode)
 {
     if (!string_to_decode) return NULL;
