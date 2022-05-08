@@ -16,7 +16,7 @@ char *b64url_encode(char *string_to_encode);
 //  return value -> decoded string (or NULL if error)
 char *b64_decode(char *string_to_decode);
 
-//  b64_decode -> decode a base64url string passed as parameter
+//  b64url_decode -> decode a base64url string passed as parameter
 //  return value -> decoded string (or NULL if error)
 char *b64url_decode(char *string_to_decode);
 
