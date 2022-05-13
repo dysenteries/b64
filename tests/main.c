@@ -16,12 +16,8 @@ int main(int argc, char **argv)
         if (!(decoded_string = b64_decode(encoded_string)))
             return 84;
         printf("%s\n", decoded_string);
-        if (!(encoded_url = b64url_encode(argv[1])))
-            return 84;
-        printf("%s\n", encoded_url);
         free(encoded_string);
         free(decoded_string);
-        free(encoded_url);
     }
     return 0;
 }
