@@ -152,12 +152,21 @@ char *b64url_encode(char *string_to_encode)
         return NULL;
 
     char *encoded_string = b64_encode(string_to_encode);
+    int len = length_without_padding(encoded_string);
+    char *encoded_url = malloc(1 + len * sizeof(char));
+    encoded_url[len] = 0;
 
-    for (int i = 0; encoded_string[i]; ++i) {
-        if (encoded_string[i] == '+') encoded_string[i] = '-';
-        if (encoded_string[i] == '/') encoded_string[i] = '_';
+    for (int i = 0; i < len; ++i) {
+        if (encoded_string[i] == '+' || encoded_string[i] == '/') {
+            if (encoded_string[i] == '+')
+                encoded_url[i] = '-';
+            if (encoded_string[i] == '/') 
+                encoded_url[i] = '_';
+        } else {
+            encoded_url[i] = encoded_string[i];
+        }
     }
-    return encoded_string;
+    return encoded_url;
 }
 
 char *b64url_decode(char *string_to_decode)
@@ -171,6 +180,6 @@ char *b64url_decode(char *string_to_decode)
         if (string_to_decode[i] == '+') string_to_decode[i] = '-';
         if (string_to_decode[i] == '/') string_to_decode[i] = '_';
     }
-    char *decoded_string = b64_decode(string_to_decode);
+    decoded_string = b64_decode(string_to_decode);
     return decoded_string;
 }
