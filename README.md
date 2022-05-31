@@ -29,6 +29,3 @@ You can change the number of tests by directly modifying the value in the loop w
 
 If there is any issue with the program, do not hesitate to report it.
 
-## Author
-
-* [@me](https://github.com/cumspot)
